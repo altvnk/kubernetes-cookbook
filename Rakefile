@@ -43,4 +43,7 @@ namespace :integration do
 end
 
 # Default
-task default: %w(style)
+task default: %w(style unit)
+
+# Full set of tests
+task full: %w(style unit integration)
