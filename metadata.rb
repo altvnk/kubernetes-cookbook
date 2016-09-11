@@ -1,0 +1,13 @@
+name             'kubernetes'
+maintainer       'Alex Litvinenko'
+maintainer_email 'altvnk@me.com'
+license          'Apache 2.0'
+description      'Installs/Configures kubernetes'
+long_description 'Installs/Configures kubernetes'
+version          '0.1.0'
+
+depends 'docker'
+depends 'chef-yum-docker'
+depends 'etcd'
+depends 'kube'
+depends 'flannel'
