@@ -6,10 +6,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-class AttributeSearch
-  extend Chef::DSL::DataQuery
-end
-
 default['docker']['version'] = '1.12.1'
 default['docker']['storage_driver'] = 'overlay'
 
@@ -19,14 +15,14 @@ default['etcd']['peer_port'] = '2380'
 if Chef::Config[:solo]
   default['etcd']['cluster_url'] = 'default=http://127.0.0.1' + ':' + default['etcd']['peer_port']
 else
-  AttributeSearch.search(:node, 'recipes:kubernetes\:\:etcd') do |s|
-    default['etcd']['members'] << s[:fqdn]
+  search(:node, 'recipes:kubernetes\:\:etcd') do |s|
+    default['etcd']['members'] << "#{s.fqdn}"
   end
-  default['etcd']['members'].each_with_index do |node_name, idx|
+  default['etcd']['members'].each_with_index do |node_string, idx|
     if idx < (default['etcd']['members'].size - 1)
-      default['etcd']['cluster_url'] += node_name + '=http://' + node_name + ':' + default['etcd']['peer_port'] + ','
+      default['etcd']['cluster_url'] += node_string + '=http://' + node_string + ':' + default['etcd']['peer_port'] + ','
     else
-      default['etcd']['cluster_url'] += node_name + '=https://' + node_name + ':' + default['etcd']['peer_port']
+      default['etcd']['cluster_url'] += node_string + '=https://' + node_string + ':' + default['etcd']['peer_port']
     end
   end
 end
