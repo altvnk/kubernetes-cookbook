@@ -13,28 +13,6 @@ suites:
     run_list: recipe[kubernetes::docker]
     attributes:
 
-  - name: etcd_test_binary_installation
+  - name: etcd_test
     run_list:
-    - recipe[etcd_test::installation_binary]
-
-  - name: etcd_test_service-execute
-    run_list:
-      - recipe[etcd_test::service_execute]
-
-  - name: etcd_test_service-systemd
-    includes: [
-      'centos-7.2'
-    ]
-    run_list:
-      - recipe[etcd_test::service_systemd]
-
-  - name: etcd_test_keys
-    includes: [
-      'centos-7'
-    ]
-    run_list:
-      - recipe[etcd_test::keys]
-
-  - name: etcd_test_with_etcdctl
-    run_list:
-      - recipe[etcd_test::auto]
+    - recipe[etcd_test::installation_binary, etcd_test::service_execute, etcd_test::service_systemd, etcd_test::keys, etcd_test::auto]
