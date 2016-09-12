@@ -19,7 +19,10 @@ else
     default['etcd']['members'] << s[:fqdn]
   end
   default['etcd']['members'].each_with_index do |node_name, idx|
-    default['etcd']['cluster_url'] += node_name + '=http://' + node_name + ':' + default['etcd']['peer_port'] + ',' if idx < (default['etcd']['members'].size - 1)
-    default['etcd']['cluster_url'] += node_name + '=https://' + node_name + ':' + default['etcd']['peer_port']
+    if idx < (default['etcd']['members'].size - 1)
+      default['etcd']['cluster_url'] += node_name + '=http://' + node_name + ':' + default['etcd']['peer_port'] + ','
+    else
+      default['etcd']['cluster_url'] += node_name + '=https://' + node_name + ':' + default['etcd']['peer_port']
+    end
   end
 end
