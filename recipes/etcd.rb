@@ -17,11 +17,11 @@ else
     etcd_members << s[:fqdn]
   end
   etcd_members.each_with_index do |node_string, idx|
-    if idx < (etcd_members.size - 1)
-      cluster_url += node_string + '=http://' + node_string + ':' + node['etcd']['peer_port'] + ','
-    else
-      cluster_url += node_string + '=http://' + node_string + ':' + node['etcd']['peer_port']
-    end
+    cluster_url += if idx < (etcd_members.size - 1)
+                     node_string + '=http://' + node_string + ':' + node['etcd']['peer_port'] + ','
+                   else
+                     node_string + '=http://' + node_string + ':' + node['etcd']['peer_port']
+                   end
   end
 end
 
