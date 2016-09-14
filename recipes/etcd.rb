@@ -47,5 +47,5 @@ else
     initial_cluster_state 'new'
     action [:create, :start]
   end
-  include_recipe 'etcd_test::smoke'
 end
+include_recipe 'etcd_test::smoke'
