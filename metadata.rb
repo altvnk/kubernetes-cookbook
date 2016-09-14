@@ -5,6 +5,8 @@ license          'Apache 2.0'
 description      'Installs/Configures kubernetes'
 long_description 'Installs/Configures kubernetes'
 version          '0.1.0'
+issues_url       'https://github.com/altvnk/kubernetes-cookbook'
+source_url       'https://github.com/altvnk/kubernetes-cookbook'
 
 depends 'docker'
 depends 'chef-yum-docker'
