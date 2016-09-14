@@ -47,5 +47,5 @@ else
     initial_cluster_state 'new'
     action [:create, :start]
   end
-  node.tag('etcd installed')
+  include_recipe 'etcd_test::smoke'
 end
