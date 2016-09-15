@@ -20,7 +20,6 @@ group :kitchen_common do
   gem 'kitchen-sync'
   gem 'kitchen-inspec'
   gem 'activesupport', '< 5.0.0'
-  gem 'kitchen-inspec'
 end
 
 group :kitchen_vagrant do
