@@ -1,1 +1,0 @@
-etcd_service 'default'

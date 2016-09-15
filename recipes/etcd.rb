@@ -48,4 +48,3 @@ else
     action [:create, :start]
   end
 end
-include_recipe 'etcd_test::smoke'
