@@ -11,6 +11,7 @@ class AttributeSearch
   extend Chef::DSL::DataQuery
 end
 
+#docker attributes
 default['docker']['version'] = '1.12.1'
 default['docker']['storage_driver'] = 'overlay'
 
@@ -18,7 +19,7 @@ default['docker']['storage_driver'] = 'overlay'
 default['etcd']['peer_port'] = '2380'
 # iterate through members to create reusable cluster_url string
 if Chef::Config[:solo]
-  default['etcd']['cluster_url'] = 'default=http://127.0.0.1' + ':' + default['etcd']['peer_port']
+ cluster_url = 'default=http://127.0.0.1' + ':' + default['etcd']['peer_port']
 else
   etcd_members = []
   cluster_url = ''
@@ -32,5 +33,6 @@ else
                      node_string + '=http://' + node_string + ':' + node['etcd']['peer_port']
                    end
   end
-  default['etcd']['cluster_url'] = cluster_url
 end
+#add cluster_url as attribute, globally available
+default['etcd']['cluster_url'] = cluster_url
