@@ -21,7 +21,7 @@ default['etcd']['client_port'] = '4001'
 # iterate through members to create reusable cluster_url string
 if Chef::Config[:solo]
   cluster_url = 'default=http://127.0.0.1' + ':' + default['etcd']['peer_port']
-  kubernetes_etcd_url = 'http://127.0.0.1' + ':' + defaule['etcd']['client_port']
+  kubernetes_etcd_url = 'http://127.0.0.1' + ':' + default['etcd']['client_port']
 else
   etcd_members = []
   cluster_url = ''
