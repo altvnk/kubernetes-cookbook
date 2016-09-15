@@ -7,3 +7,8 @@ describe command('docker rmi hello-world --force') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match(/Deleted:/) }
 end
+
+describe command('docker info') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match(/Storage Driver: overlay/) }
+end

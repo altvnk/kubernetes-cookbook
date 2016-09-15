@@ -21,3 +21,7 @@ suites:
   - name: etcd
     run_list:
       - recipe[kubernetes::etcd]
+
+  - name: master
+    run_list:
+      - recipe[kubernetes::master]
