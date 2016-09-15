@@ -14,9 +14,10 @@ verifier:
 
 suites:
   - name: docker
-    run_list: recipe[kubernetes::docker]
+    run_list:
+      - recipe[kubernetes::docker]
     attributes:
 
   - name: etcd
     run_list:
-    - recipe[kubernetes::etcd]
+      - recipe[kubernetes::etcd]
