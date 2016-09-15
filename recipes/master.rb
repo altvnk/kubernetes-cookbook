@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: kubernetes
-# Recipe:: etcd
+# Recipe:: master
 #
 # Copyright (C) 2016 Max Kozinenko
 #
@@ -20,7 +20,7 @@ if Chef::Config[:solo]
   end
   kube_apiserver 'default' do
     service_cluster_ip_range node['kubernetes']['cluster_ip_range']
-    etcd_servers 'http://127.0.0.1:4001'
+    etcd_servers node['kubernetes']['etcd_servers']
     insecure_bind_address '0.0.0.0'
     action [:create, :start]
   end
