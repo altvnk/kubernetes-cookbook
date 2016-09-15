@@ -26,7 +26,7 @@ else
   etcd_members = []
   cluster_url = ''
   kubernetes_etcd_url = ''
-  AttributeSearch.search(:node, 'runlist:*kubernetes:\:\etcd*') do |s|
+  AttributeSearch.search(:node, 'run_list:*etcd*') do |s|
     etcd_members << s[:fqdn]
   end
   etcd_members.each_with_index do |node_string, idx|
@@ -55,7 +55,7 @@ if Chef::Config[:solo]
 else
   api_servers = []
   apiserver_url = ''
-  AttributeSearch.search(:node, 'runlist:*kubernetes:\:\master*') do |s|
+  AttributeSearch.search(:node, 'run_list:*master*') do |s|
     api_servers << s[:fqdn]
   end
   api_servers.each_with_index do |node_string, idx|
