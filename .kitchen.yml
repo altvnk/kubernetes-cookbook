@@ -10,6 +10,7 @@ platforms:
 
 verifier:
   name: inspec
+  sudo: true
 
 suites:
   - name: docker
