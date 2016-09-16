@@ -1,6 +1,6 @@
 describe command('kubectl cluster-info') do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should match(/\e[0;32mKubernetes master\e[0m is running at/) }
+  its(:stdout) { should match(/Kubernetes master/) }
 end
 
 describe command('kubectl api-versions') do
