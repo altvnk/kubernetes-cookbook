@@ -19,19 +19,19 @@ end
 # download calico binaries
 remote_file 'calicoctl binary' do
   path '/usr/bin/calicoctl'
-  mode '0755'
+  mode '0777'
   source 'http://www.projectcalico.org/builds/calicoctl'
 end
 
 remote_file 'calico binary' do
   path '/opt/cni/bin/calico'
-  mode '0755'
+  mode '0777'
   source 'https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico'
 end
 
 remote_file 'calico-ipam binary' do
   path '/opt/cni/bin/calico-ipam'
-  mode '0755'
+  mode '0777'
   source 'https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam'
 end
 
