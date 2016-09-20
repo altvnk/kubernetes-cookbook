@@ -7,26 +7,17 @@
 # All rights reserved - Do Not Redistribute
 #
 
-if Chef::Config[:solo]
-  etcd_service 'default' do
-    advertise_client_urls 'http://127.0.0.1:2379,http://127.0.0.1:4001'
-    listen_client_urls 'http://0.0.0.0:2379,http://0.0.0.0:4001'
-    initial_advertise_peer_urls 'http://127.0.0.1:2380'
-    listen_peer_urls 'http://0.0.0.0:2380'
-    initial_cluster_token 'etcd-cluster-1'
-    initial_cluster node['etcd']['cluster_url']
-    initial_cluster_state 'new'
-    action [:create, :start]
-  end
-else
-  etcd_service node['fqdn'] do
-    advertise_client_urls 'http://' + node['ipaddress'] + ':2379,http://' + node['ipaddress'] + ':4001'
-    listen_client_urls 'http://0.0.0.0:2379,http://0.0.0.0:4001'
-    initial_advertise_peer_urls 'http://' + node['ipaddress'] + ':2380'
-    listen_peer_urls 'http://0.0.0.0:2380'
-    initial_cluster_token 'etcd-cluster-1'
-    initial_cluster node['etcd']['cluster_url']
-    initial_cluster_state 'new'
-    action [:create, :start]
-  end
+etcd_installation 'default' do
+  action :create
+end
+
+etcd_service 'etcd' do
+  node_name node['hostname']
+  advertise_client_urls 'http://' + node['ipaddress'] + ':' + node['kubernetes']['etcd']['clientport']
+  listen_client_urls 'http://0.0.0.0:' + node['kubernetes']['etcd']['clientport']
+  initial_advertise_peer_urls 'http://' + node['ipaddress'] + ':' + node['kubernetes']['etcd']['peerport']
+  listen_peer_urls 'http://' + node['ipaddress'] + ':' + node['kubernetes']['etcd']['peerport']
+  initial_cluster_token node['kubernetes']['etcd']['token']
+  initial_cluster node['kubernetes']['etcd']['initial'].join(',')
+  action :start
 end

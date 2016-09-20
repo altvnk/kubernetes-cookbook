@@ -1,9 +1,13 @@
 ---
 driver:
   name: vagrant
+  network:
+    -
+      - private_network
+      - type: dhcp
 
 provisioner:
-  name: chef_solo
+  name: nodes
 
 platforms:
   - name: centos-7.2
@@ -13,15 +17,63 @@ verifier:
   sudo: true
 
 suites:
-  - name: docker
+  - name: master1
     run_list:
-      - recipe[kubernetes::docker]
-    attributes:
-
-  - name: etcd
-    run_list:
+      - recipe[vagrant]
       - recipe[kubernetes::etcd]
-
-  - name: master
-    run_list:
+      - recipe[kubernetes::docker]
+      - recipe[kubernetes::calico]
+      - recipe[kubernetes::kubeproxy]
       - recipe[kubernetes::master]
+    attributes:
+      tags:
+        - etcd
+        - master
+
+  - name: master2
+    run_list:
+      - recipe[vagrant]
+      - recipe[kubernetes::etcd]
+      - recipe[kubernetes::docker]
+      - recipe[kubernetes::calico]
+      - recipe[kubernetes::kubeproxy]
+      - recipe[kubernetes::master]
+    attributes:
+      tags:
+        - etcd
+        - master
+
+  - name: master3
+    run_list:
+      - recipe[vagrant]
+      - recipe[kubernetes::etcd]
+      - recipe[kubernetes::docker]
+      - recipe[kubernetes::calico]
+      - recipe[kubernetes::kubeproxy]
+      - recipe[kubernetes::master]
+    attributes:
+      tags:
+        - etcd
+        - master
+
+  - name: slave1
+    run_list:
+      - recipe[vagrant]
+      - recipe[kubernetes::docker]
+      - recipe[kubernetes::calico]
+      - recipe[kubernetes::kubeproxy]
+      - recipe[kubernetes::slave]
+    attributes:
+      tags:
+        - slave
+
+  - name: slave2
+    run_list:
+      - recipe[vagrant]
+      - recipe[kubernetes::docker]
+      - recipe[kubernetes::calico]
+      - recipe[kubernetes::kubeproxy]
+      - recipe[kubernetes::slave]
+    attributes:
+      tags:
+        - slave

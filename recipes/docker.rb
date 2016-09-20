@@ -7,7 +7,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-# Configures Docker YUM Repository
 include_recipe 'chef-yum-docker'
 
 # Install Docker package from upstream repo, configures Systemd service
