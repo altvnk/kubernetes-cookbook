@@ -45,7 +45,7 @@ template '/etc/systemd/system/calico.service' do
 end
 
 template '/etc/cni/net.d/10-calico.conf' do
-  mode '0640'
+  mode '0666'
   source 'cni.erb'
   variables(
       etcd_members_string: node['kubernetes']['etcd']['members'].join(',')

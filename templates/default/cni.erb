@@ -1,7 +1,7 @@
 {
 "name": "calico-k8s-network",
 "type": "calico",
-"etcd_endpoints": "<% @etcd_members_string %>",
+"etcd_endpoints": "<%=@etcd_members_string%>",
   "log_level": "info",
   "ipam": {
   "type": "calico-ipam"

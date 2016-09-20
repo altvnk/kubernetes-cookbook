@@ -18,7 +18,9 @@ kubelet_service 'kubelet' do
   api_servers node['kubernetes']['apiserver']['cluster_url'].join(',')
   config '/etc/kubernetes/manifests'
   cluster_dns '10.0.0.10'
-  cluster_domain 'cluster.local'
+  cluster_domain 'kubernetes.local'
+  network_plugin 'cni'
+  network_plugin_dir '/etc/cni/net.d'
   action %w(create start)
 end
 package 'ethtool'
