@@ -1,0 +1,35 @@
+# Create this manifest using kubectl to deploy
+# the Calico policy controller on Kubernetes.
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: calico-policy-controller
+  namespace: kube-system
+  labels:
+    k8s-app: calico-policy
+    kubernetes.io/cluster-service: "true"
+spec:
+  replicas: 1
+  selector:
+    k8s-app: calico-policy
+  template:
+    metadata:
+      name: calico-policy-controller
+      namespace: kube-system
+      labels:
+        kubernetes.io/cluster-service: "true"
+        k8s-app: calico-policy
+    spec:
+      hostNetwork: true
+      containers:
+      - name: calico-policy-controller
+        image: calico/kube-policy-controller:latest
+        env:
+          # Configure the policy controller with the location of
+          # your etcd cluster.
+          - name: ETCD_ENDPOINTS
+            value: "<%=@etcd_endpoints%>"
+          - name: K8S_API
+            value: "http://kubernetes.default:8080"
+          - name: CONFIGURE_ETC_HOSTS
+            value: "true"

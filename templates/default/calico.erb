@@ -5,9 +5,11 @@ Requires=docker.service
 
 [Service]
 User=root
-Environment=ETCD_ENDPOINTS="<%=@etcd_members_string%>"
+EnvironmentFile=/etc/calico/calico-env
 PermissionsStartOnly=true
+ExecStartPre=-/usr/bin/docker rm -f calico-node
 ExecStart=/usr/bin/calicoctl node --detach=false
+ExecStop=-/usr/bin/docker stop calico-node
 Restart=always
 RestartSec=10
 

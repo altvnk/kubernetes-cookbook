@@ -5,6 +5,8 @@ driver:
     -
       - private_network
       - type: dhcp
+  customize:
+    memory: 756
 
 provisioner:
   name: nodes
@@ -25,6 +27,7 @@ suites:
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]
       - recipe[kubernetes::master]
+      - recipe[kubernetes::slave]
     attributes:
       tags:
         - etcd
@@ -38,6 +41,7 @@ suites:
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]
       - recipe[kubernetes::master]
+      - recipe[kubernetes::slave]
     attributes:
       tags:
         - etcd
@@ -51,6 +55,7 @@ suites:
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]
       - recipe[kubernetes::master]
+      - recipe[kubernetes::slave]
     attributes:
       tags:
         - etcd
@@ -59,17 +64,7 @@ suites:
   - name: slave1
     run_list:
       - recipe[vagrant]
-      - recipe[kubernetes::docker]
-      - recipe[kubernetes::calico]
-      - recipe[kubernetes::kubeproxy]
-      - recipe[kubernetes::slave]
-    attributes:
-      tags:
-        - slave
-
-  - name: slave2
-    run_list:
-      - recipe[vagrant]
+      - recipe[kubernetes::state-storage-proxy]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]

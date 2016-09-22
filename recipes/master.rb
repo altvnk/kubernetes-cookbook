@@ -14,20 +14,39 @@ remote_file 'kubectl binary' do
   source 'https://storage.googleapis.com/kubernetes-release/release/v1.3.6/bin/linux/amd64/kubectl'
   checksum 'ec6941a5ff14ddd5044f11f369a8e0946f00201febc73282554f2150aad5bc06'
 end
+directory '/etc/kubernetes/manifests' do
+  recursive true
+end
+
 kube_apiserver 'master' do
   service_cluster_ip_range '10.0.0.1/24'
   etcd_servers node['kubernetes']['etcd']['members'].join(',')
   insecure_bind_address '0.0.0.0' # for convenience
   insecure_port node['kubernetes']['apiserver']['insecure_port']
+  allow_privileged true
   action [:create, :start]
 end
+
 kube_scheduler 'default' do
   master 'http://127.0.0.1:8080'
   leader_elect 'true'
   action [:create, :start]
 end
+
 kube_controller_manager 'default' do
   master 'http://127.0.0.1:8080'
   leader_elect true
   action [:create, :start]
+end
+
+template '/etc/kubernetes/manifests/calico-policy-controller.yml' do
+  mode '0666'
+  source 'calico-policy-controller.erb'
+  variables(
+    etcd_endpoints: node['kubernetes']['etcd']['members'][0]
+  )
+end
+
+execute 'launch calico policy controller' do
+  command 'kubectl create -f /etc/kubernetes/manifests/calico-policy-controller.yml'
 end

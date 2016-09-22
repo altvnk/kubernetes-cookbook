@@ -27,3 +27,6 @@ package 'ethtool'
 group 'docker' do
   members ['kubernetes']
 end
+service 'kubelet' do
+  action [:restart]
+end
