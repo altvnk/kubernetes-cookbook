@@ -46,7 +46,3 @@ template '/etc/kubernetes/manifests/calico-policy-controller.yml' do
     etcd_endpoints: node['kubernetes']['etcd']['members'][0]
   )
 end
-
-execute 'launch calico policy controller' do
-  command 'kubectl create -f /etc/kubernetes/manifests/calico-policy-controller.yml'
-end

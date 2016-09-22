@@ -9,6 +9,14 @@
 
 # create calico and CNI conf directories
 
+directory '/opt/cni/bin' do
+  recursive true
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+end
+
 directory '/etc/cni/net.d' do
   recursive true
 end
@@ -36,20 +44,13 @@ remote_file 'calico-ipam binary' do
   source 'https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam'
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/large-file.tar.gz" do
+remote_file "#{Chef::Config[:file_cache_path]}/cni-v0.3.0.tgz" do
   mode '0777'
   source 'https://github.com/containernetworking/cni/releases/download/v0.3.0/cni-v0.3.0.tgz'
 end
 
 execute 'extract_binaries' do
-  command 'mkdir -P /opt/cni/bin && tar -xzvf /tmp/cni-v0.3.0.tgz -C /opt/cni/bin'
-end
-
-directory '/opt/cni/bin' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
+  command "tar -xzvf #{Chef::Config[:file_cache_path]}/cni-v0.3.0.tgz -C /opt/cni/bin"
 end
 
 # render conf templates
@@ -73,6 +74,10 @@ template '/etc/calico/calico-env' do
   variables(
     etcd_members_string: node['kubernetes']['etcd']['members'].join(',')
   )
+end
+
+service 'calico' do
+  action [:enable]
 end
 
 service 'calico' do
