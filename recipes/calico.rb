@@ -8,7 +8,6 @@
 #
 
 # create calico and CNI conf directories
-
 directory '/opt/cni/bin' do
   recursive true
   owner 'root'
