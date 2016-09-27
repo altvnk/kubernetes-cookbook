@@ -7,6 +7,6 @@ cookbook 'etcd', '>= 4.0.0'
 cookbook 'kube', git: 'https://github.com/aespinosa/cookbook-kube.git'
 cookbook 'flannel', '>= 1.1.0'
 cookbook 'vagrant', path: 'test/cookbooks/vagrant'
-cookbook 'chef-client', '= 0.99.1'
+cookbook 'chef-client', '~> 6.0.0'
 
 metadata
