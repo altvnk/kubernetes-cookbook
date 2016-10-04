@@ -6,5 +6,3 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-
-include_recipe 'chef-client::systemd_service'
