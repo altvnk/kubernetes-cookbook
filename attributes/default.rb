@@ -43,3 +43,6 @@ end
 AttributeSearch.search(:node, 'role:master') do |node|
   default['kubernetes']['apiserver']['cluster_url'] << "http://#{node['ipaddress']}:#{default['kubernetes']['apiserver']['insecure_port']}"
 end
+
+# chef-client attributes
+default['chef_client']['interval'] = 300

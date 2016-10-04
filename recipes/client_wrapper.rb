@@ -9,6 +9,6 @@
 
 include_recipe 'chef-client::systemd_service'
 
-node[:role].push('etcd') if tagged?('etcd') && !node[:role].include?('etcd')
-node[:role].push('master') if tagged?('master') && !node[:role].include?('master')
-node[:role].push('slave') if tagged?('slave') && !node[:role].include?('slave')
+node.run_list.add('role[etcd]') if node[:tags].include? 'etcd'
+node.run_list.add('role[master]') if node[:tags].include? 'master'
+node.run_list.add('role[slave]') if node[:tags].include? 'slave'
