@@ -30,6 +30,6 @@ spec:
           - name: ETCD_ENDPOINTS
             value: "<%=@etcd_endpoints%>"
           - name: K8S_API
-            value: "http://kubernetes.default:8080"
+            value: "<%=@kubemaster_url%>"
           - name: CONFIGURE_ETC_HOSTS
             value: "true"
