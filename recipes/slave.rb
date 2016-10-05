@@ -30,3 +30,5 @@ end
 service 'kubelet' do
   action [:restart]
 end
+
+include_recipe 'kubernetes::calico-policy-controller'
