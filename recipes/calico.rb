@@ -74,15 +74,3 @@ template '/etc/calico/calico-env' do
     etcd_members_string: node['kubernetes']['etcd']['members'].join(',')
   )
 end
-
-service 'calico' do
-  action [:enable]
-end
-
-service 'calico' do
-  action [:restart]
-end
-
-service 'docker' do
-  action [:restart]
-end
