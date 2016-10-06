@@ -22,12 +22,14 @@ suites:
   - name: master1
     run_list:
       - recipe[vagrant]
+      - recipe[kubernetes::client_wrapper]
       - recipe[kubernetes::etcd]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]
       - recipe[kubernetes::master]
       - recipe[kubernetes::slave]
+      - recipe[kubernetes::addons]
     attributes:
       tags:
         - etcd
@@ -36,6 +38,7 @@ suites:
   - name: master2
     run_list:
       - recipe[vagrant]
+      - recipe[kubernetes::client_wrapper]
       - recipe[kubernetes::etcd]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
@@ -50,6 +53,7 @@ suites:
   - name: master3
     run_list:
       - recipe[vagrant]
+      - recipe[kubernetes::client_wrapper]
       - recipe[kubernetes::etcd]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
@@ -64,6 +68,7 @@ suites:
   - name: slave1
     run_list:
       - recipe[vagrant]
+      - recipe[kubernetes::client_wrapper]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]
@@ -75,6 +80,7 @@ suites:
   - name: slave2
     run_list:
       - recipe[vagrant]
+      - recipe[kubernetes::client_wrapper]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
       - recipe[kubernetes::kubeproxy]
