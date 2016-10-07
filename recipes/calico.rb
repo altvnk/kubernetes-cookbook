@@ -62,7 +62,7 @@ template '/etc/cni/net.d/10-calico.conf' do
   mode '0666'
   source 'cni.erb'
   variables(
-    etcd_members_string: node['kubernetes']['etcd']['members'][0],
+    etcd_members_string: node['kubernetes']['etcd']['members'].join(','),
     k8s_apiserver: node['kubernetes']['apiserver']['cluster_url'][0]
   )
 end
