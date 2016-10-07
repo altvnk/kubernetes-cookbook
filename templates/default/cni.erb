@@ -4,5 +4,8 @@
 "etcd_endpoints": "<%=@etcd_members_string%>",
   "log_level": "info",
   "ipam": {"type": "calico-ipam"},
-  "policy": {"type": "k8s"}
+  "policy": {
+    "type": "k8s",
+    "k8s_api_root": "<%=@k8s_apiserver%>"
+    }
 }
