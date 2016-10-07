@@ -7,6 +7,7 @@ metadata:
   namespace: calico-system
 spec:
   hostNetwork: true
+  replicas: 1
   containers:
   # The Calico policy controller.
   - name: k8s-policy-controller
@@ -17,12 +18,5 @@ spec:
     - name: K8S_API
       value: "<%=@kubemaster_url%>"
     - name: LEADER_ELECTION
-      value: "true"
+      value: "false"
     # Leader election container used by the policy controller.
-  - name: leader-elector
-    image: quay.io/calico/leader-elector:v0.1.0
-    imagePullPolicy: IfNotPresent
-    args:
-    - "--election=calico-policy-election"
-    - "--election-namespace=calico-system"
-    - "--http=127.0.0.1:4040"
