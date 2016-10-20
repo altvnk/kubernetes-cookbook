@@ -35,12 +35,12 @@ default['kubernetes']['etcd']['client']['key']    = nil
 default['kubernetes']['apiserver']['insecure_port'] = '8080'
 default['kubernetes']['apiserver']['cluster_url']   = []
 
-AttributeSearch.search(:node, 'role:etcd') do |node|
+AttributeSearch.search(:node, 'run_list:*etcd*') do |node|
   default['kubernetes']['etcd']['initial'] << "#{node['fqdn']}=http://#{node['ipaddress']}:#{default['kubernetes']['etcd']['peerport']}"
   default['kubernetes']['etcd']['members'] << "http://#{node['ipaddress']}:#{default['kubernetes']['etcd']['clientport']}"
 end
 
-AttributeSearch.search(:node, 'role:master') do |node|
+AttributeSearch.search(:node, 'run_list:*master*') do |node|
   default['kubernetes']['apiserver']['cluster_url'] << "http://#{node['ipaddress']}:#{default['kubernetes']['apiserver']['insecure_port']}"
 end
 
