@@ -1,0 +1,12 @@
+[Unit]
+Description=Consul
+After=network.service
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/consul agent -ui -server -client=0.0.0.0 -ui-dir=/var/lib/consul/web --data-dir=/var/lib/consul --bootstrap-expect=1
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
