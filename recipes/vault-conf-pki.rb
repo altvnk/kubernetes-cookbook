@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: kubernetes
-# Recipe:: vault-init
+# Recipe:: vault-conf-pki
 #
 # Copyright (C) 2016 Max Kozinenko
 #
