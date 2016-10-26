@@ -10,6 +10,7 @@ driver:
 
 provisioner:
   name: nodes
+  data_bags_path: "data_bags"
 
 platforms:
   - name: centos-7.2
