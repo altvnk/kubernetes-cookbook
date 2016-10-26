@@ -4,7 +4,7 @@ After=network.service
 
 [Service]
 User=root
-ExecStart=/usr/local/bin/consul agent -ui -server -client=0.0.0.0 -ui-dir=/var/lib/consul/web --data-dir=/var/lib/consul --bootstrap-expect=1
+ExecStart=/usr/local/bin/vault server -config=/etc/vault/vault.hcl
 Restart=always
 RestartSec=10
 

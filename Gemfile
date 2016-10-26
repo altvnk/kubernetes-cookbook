@@ -20,7 +20,7 @@ group :kitchen_common do
   gem 'kitchen-sync'
   gem 'kitchen-nodes'
   gem 'kitchen-inspec'
-  gem 'mixlib-install', '~>1.2.0'
+  gem 'mixlib-install', '~> 1.2.0'
   gem 'activesupport', '< 5.0.0'
 end
 

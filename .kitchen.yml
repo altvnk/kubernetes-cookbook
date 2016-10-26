@@ -23,6 +23,9 @@ suites:
     run_list:
       - recipe[vagrant]
       - recipe[kubernetes::client_wrapper]
+      - recipe[kubernetes::consul]
+      - recipe[kubernetes::vault]
+      - recipe[kubernetes::vault-init]
       - recipe[kubernetes::etcd]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]

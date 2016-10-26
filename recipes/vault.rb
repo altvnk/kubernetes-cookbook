@@ -1,38 +1,39 @@
 #
 # Cookbook Name:: kubernetes
-# Recipe:: consul
+# Recipe:: vault
 #
 # Copyright (C) 2016 Max Kozinenko
 #
 # All rights reserved - Do Not Redistribute
 #
 
-directory '/var/lib/consul/web' do
+directory '/etc/vault' do
   recursive true
 end
 
-remote_file 'consul package' do
-  path "#{Chef::Config[:file_cache_path]}/consul_package.zip"
-  source 'https://releases.hashicorp.com/consul/0.7.0/consul_0.7.0_linux_amd64.zip'
-end
-remote_file 'consul UI package' do
-  path "#{Chef::Config[:file_cache_path]}/consul_web_ui.zip"
-  source 'https://releases.hashicorp.com/consul/0.7.0/consul_0.7.0_web_ui.zip'
+remote_file 'vault package' do
+  path "#{Chef::Config[:file_cache_path]}/vault_package.zip"
+  source 'https://releases.hashicorp.com/vault/0.6.2/vault_0.6.2_linux_amd64.zip'
 end
 
-zipfile "#{Chef::Config[:file_cache_path]}/consul_package.zip" do
+zipfile "#{Chef::Config[:file_cache_path]}/vault_package.zip" do
+  not_if { ::File.exist?('/usr/local/bin/vault') }
   into '/usr/local/bin'
 end
 
-zipfile "#{Chef::Config[:file_cache_path]}/consul_web_ui.zip" do
-  into '/var/lib/consul/web'
-end
-
-template '/etc/systemd/system/consul.service' do
+template '/etc/systemd/system/vault.service' do
   mode '0640'
-  source 'consul.erb'
+  source 'vault.erb'
 end
 
-service 'consul' do
-  action[:enable, :start]
+template '/etc/vault/vault.hcl' do
+  mode '0640'
+  source 'vault-config.erb'
+  variables(
+    node_addr: node['ip']
+  )
+end
+
+service 'vault' do
+  action [:enable, :start]
 end
