@@ -30,7 +30,7 @@ template '/etc/vault/vault.hcl' do
   mode '0640'
   source 'vault-config.erb'
   variables(
-    node_addr: node['ip']
+    node_addr: node['ipaddress']
   )
 end
 

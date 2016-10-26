@@ -35,7 +35,7 @@ template '/etc/systemd/system/consul.service' do
   mode '0640'
   source 'consul.erb'
   variables(
-    node_addr: node['ip']
+    node_addr: node['ipaddress']
   )
 end
 
