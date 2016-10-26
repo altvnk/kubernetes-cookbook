@@ -17,5 +17,5 @@ ruby_block "vault_init" do
 end
 
 file '/etc/vault/vault.secrets' do
-  content "#{init_cmd}"
+  content init_cmd
 end
