@@ -13,15 +13,17 @@ ruby_block 'vault_unseal' do
   block do
     Chef::Resource::RubyBlock.send(:include,Chef::Mixin::ShellOut)
     # unseal cmd
-    if File.file?(Chef::Config[:encrypted_data_bag_secret])
-      secret = Chef::EncryptedDataBagItem.load_secret(Chef::Config[:encrypted_data_bag_secret])
-      keys = data_bag_item('vault_keys', 'keys', secret)
-    else
-      keys = data_bag_item('vault_keys', 'keys')
+ #   if File.file?(Chef::Config[:encrypted_data_bag_secret])
+ #     secret = Chef::EncryptedDataBagItem.load_secret(Chef::Config[:encrypted_data_bag_secret])
+ #     keys = data_bag_item('vault_keys', 'keys', secret)
+ #   else
+    key = []
+    for i in 1..3 do
+      key_id = 'key' + i.to_s
+      key[i] = data_bag_item('vault_keys', key_id)['key']
+      command = 'vault unseal ' + key[i]
+      shell_out(command)
     end
-
-    keys.each_with_index do |key, index|
-      shell_out("vault unseal #{key}").stdout
-    end
+ #   end
   end
 end
