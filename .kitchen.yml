@@ -27,6 +27,7 @@ suites:
       - recipe[kubernetes::consul]
       - recipe[kubernetes::vault]
       - recipe[kubernetes::vault-init]
+      - recipe[kubernetes::vault-unseal]
       - recipe[kubernetes::etcd]
       - recipe[kubernetes::docker]
       - recipe[kubernetes::calico]
