@@ -4,7 +4,7 @@ After=network.service
 
 [Service]
 User=root
-ExecStart=/usr/local/bin/consul agent -ui -server -client=<%=@node_addr%> -advertise=<%=@node_addr%> -ui-dir=/var/lib/consul/web --data-dir=/var/lib/consul<%if !@join_string.empty?%><%=@join_string%><%end%><%if !@bootstrap_string.empty?%><%=@bootstrap_string%><%end%>
+ExecStart=/usr/local/bin/consul agent -ui -server -client=<%=@node_addr%> -advertise=<%=@node_addr%> -ui-dir=/var/lib/consul/web --data-dir=/var/lib/consul<%if !@join_string.empty?%><%=@join_string%><%end%> -bootstrap-expect=3
 Restart=always
 RestartSec=10
 

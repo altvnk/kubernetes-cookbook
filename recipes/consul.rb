@@ -41,8 +41,7 @@ template '/etc/systemd/system/consul.service' do
   source 'consul.erb'
   variables(
     node_addr: node['ipaddress'],
-    join_string: consul_join_string,
-    bootstrap_string: ' -bootstrap-expect=1'
+    join_string: consul_join_string
   )
 end
 

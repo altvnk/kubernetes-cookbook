@@ -13,7 +13,13 @@ directory '/etc/vault_ca' do
   recursive true
 end
 
-if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
+token_databag_item = begin
+                       data_bag_item('vault_keys', 'vault_token')
+                     rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
+                       nil
+                     end
+
+if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem') && token_databag_item
   # auth with vault
   token = data_bag_item('vault_keys', 'vault_token')['token']
   execute 'vault_auth' do
