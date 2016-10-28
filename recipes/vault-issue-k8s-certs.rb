@@ -24,6 +24,8 @@ if !File.file?('/etc/k8s-certs/key.pem')
 
       File.write('/etc/k8s-certs/cert.pem', parsed_stdout['data']['certificate'])
       File.write('/etc/k8s-certs/key.pem', parsed_stdout['data']['private_key'])
+
+      File.write('/etc/pki/ca-trust/source/anchors/internal_interm.pem', parsed_stdout['data']['issuing_ca'])
     end
   end
 
@@ -33,5 +35,14 @@ if !File.file?('/etc/k8s-certs/key.pem')
 
   file '/etc/k8s-certs/key.pem' do
     mode '0600'
+  end
+
+  remote_file '/etc/pki/ca-trust/source/anchors/internal_ca.pem' do
+    source "http://#{node['ipaddress']}:8200/v1/k8s-infra/ca/pem"
+    action :create
+  end
+
+  execute 'update-ca-trust' do
+    command 'update-ca-trust'
   end
 end
