@@ -38,7 +38,7 @@ if !File.file?('/etc/k8s-certs/key.pem')
   end
 
   remote_file '/etc/pki/ca-trust/source/anchors/internal_ca.pem' do
-    source "http://#{node['ipaddress']}:8200/v1/k8s-infra/ca/pem"
+    source "https://#{node['ipaddress']}:8200/v1/k8s-infra/ca/pem"
     action :create
   end
 
