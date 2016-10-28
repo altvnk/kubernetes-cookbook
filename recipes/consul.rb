@@ -36,26 +36,13 @@ node['consul']['members'].each do |member|
   consul_join_string += ' -join=' + member
 end
 
-if node['ipaddress'] == node['consul']['members'][0]
-  template '/etc/systemd/system/consul.service' do
-    mode '0640'
-    source 'consul.erb'
-    variables(
-      node_addr: node['ipaddress'],
-      join_string: consul_join_string,
-      bootstrap_string: ' -bootstrap-expect=1'
-    )
-  end
-else
-    template '/etc/systemd/system/consul.service' do
-      mode '0640'
-      source 'consul.erb'
-      variables(
-          node_addr: node['ipaddress'],
-          join_string: consul_join_string,
-          bootstrap_string: ''
-      )
-    end
+template '/etc/systemd/system/consul.service' do
+  mode '0640'
+  source 'consul.erb'
+  variables(
+    node_addr: node['ipaddress'],
+    join_string: consul_join_string
+  )
 end
 
 service 'consul' do
