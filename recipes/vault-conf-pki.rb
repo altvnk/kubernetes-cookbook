@@ -20,7 +20,7 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
     command "vault auth #{token}"
   end
 
-  # create and configure root CA
+  # create and configure root CA TODO: add mount checks
   execute 'mount_root_pki' do
     command 'vault mount -path=k8s-infra -description="K8S cluster Root CA" -max-lease-ttl=87600h pki'
   end
