@@ -29,9 +29,7 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
     block do
       ca_raw = shell_out('vault write --format=json k8s-infra/root/generate/internal common_name="K8S cluster Root CA" ttl=87600h key_bits=4096 exclude_cn_from_sans=true').stdout
       ca_data = JSON.parse(ca_raw)
-      ca_file = File.new('/etc/pki/ca-trust/source/anchors/vault_ca.pem', 'w')
-      ca_file.write(ca_data['data']['certificate'])
-      ca_file.close
+      File.write('/etc/pki/ca-trust/source/anchors/vault_ca.pem', ca_data['data']['certificate'])
     end
   end
 
