@@ -25,8 +25,15 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
     command 'vault mount -path=k8s-infra -description="K8S cluster Root CA" -max-lease-ttl=87600h pki'
   end
 
-  execute 'create_root_ca' do
-    command 'vault write k8s-infra/root/generate/internal common_name="K8S cluster Root CA" ttl=87600h key_bits=4096 exclude_cn_from_sans=true'
+  ruby_block 'create_root_ca' do
+    block do
+      ca_raw = shell_out('vault write k8s-infra/root/generate/internal common_name="K8S cluster Root CA" ttl=87600h key_bits=4096 exclude_cn_from_sans=true').stdout
+      ca_data = JSON.parse(ca_raw)
+      file '/etc/pki/ca-trust/source/anchors/vault_ca.pem' do
+        content ca_data['data']['certificate']
+        mode '0755'
+      end
+    end
   end
 
   execute 'configure_root_ca_issuing_url' do
@@ -42,7 +49,7 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
     block do
       csr_request = shell_out('vault write -format=json k8s-infra-interm/intermediate/generate/internal common_name="K8S cluster Intermediate CA" ttl=26280h key_bits=4096 exclude_cn_from_sans=true').stdout
       csr_text = JSON.parse(csr_request)
-      shell_out("vault write -format=json k8s-infra-interm/root/sign-intermediate csr=#{csr_text} common_name='K8S cluster Intermediate CA ttl=8760h").stdout
+      shell_out("vault write -format=json k8s-infra-interm/root/sign-intermediate csr=#{csr_text['data']['csr']} common_name='K8S cluster Intermediate CA ttl=8760h").stdout
     end
   end
 
@@ -53,10 +60,6 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
   # configure cert roles
   execute 'configure_etcd_role' do
     command 'vault write k8s-infra-interm/roles/server key_bits=2048 max_ttl=8760h allow_any_name=true'
-  end
-
-  remote_file '/etc/pki/ca-trust/source/anchors/vault_ca.pem' do
-    source "https://#{node['ipaddress']}:8200/v1/k8s-infra/ca/pem"
   end
 
   execute 'update_trust' do
