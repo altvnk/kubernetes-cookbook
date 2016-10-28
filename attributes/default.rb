@@ -46,3 +46,9 @@ end
 
 # chef-client attributes
 default['chef_client']['interval'] = 300
+
+# consul attributes
+default['consul']['members']                      = []
+AttributeSearch.search(:node, 'run_list:*consul*') do |node|
+  default['consul']['members'] << "#{node['ipaddress']}"
+end

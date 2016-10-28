@@ -1,11 +1,13 @@
-disable_mlock  = true
+cluster_name = "k8s_vault"
 
 listener "tcp" {
-address = "0.0.0.0:8200"
-tls_disable = 1
+address = "<%=@node_addr%>:8200"
+tls_cert_file = "/etc/vault/cert.pem"
+tls_key_file = "/etc/vault/key.pem"
 }
 
 backend "consul" {
 address = "<%=@node_addr%>:8500"
+redirect_addr = "https://<%=@node_addr%>:8200"
 path = "vault"
 }

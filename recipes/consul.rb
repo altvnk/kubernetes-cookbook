@@ -31,11 +31,18 @@ zipfile "#{Chef::Config[:file_cache_path]}/consul_web_ui.zip" do
   into '/var/lib/consul/web'
 end
 
+consul_join_string = ''
+node['consul']['members'].each do |member|
+  consul_join_string += ' -join=' + member
+end
+
 template '/etc/systemd/system/consul.service' do
   mode '0640'
   source 'consul.erb'
   variables(
-    node_addr: node['ipaddress']
+    node_addr: node['ipaddress'],
+    join_string: consul_join_string,
+    bootstrap_string: ' -bootstrap-expect=1'
   )
 end
 
