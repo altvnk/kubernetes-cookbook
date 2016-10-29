@@ -22,10 +22,10 @@ if !File.file?('/etc/k8s-certs/key.pem')
       stdout = shell_out("vault write -format=json k8s-infra-interm/issue/server common_name=\"#{node['fqdn']}\" ip_sans=\"#{node['ipaddress']}\" ttl=8760h format=pem").stdout
       parsed_stdout = JSON.parse(stdout)
 
-      File.write('/etc/k8s-certs/cert.pem', parsed_stdout['data']['certificate'])
+      cert_string = parsed_stdout['data']['certificate'] + '\n' + parsed_stdout['data']['issuing_ca']
+      File.write('/etc/k8s-certs/cert.pem', cert_string)
       File.write('/etc/k8s-certs/key.pem', parsed_stdout['data']['private_key'])
-
-      File.write('/etc/pki/ca-trust/source/anchors/internal_interm.pem', parsed_stdout['data']['issuing_ca'])
+      
     end
   end
 
