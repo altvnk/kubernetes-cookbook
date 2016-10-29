@@ -19,7 +19,7 @@ if !File.file?('/etc/k8s-certs/key.pem')
     block do
       require 'json'
 
-      stdout = shell_out("vault write -format=json k8s-infra/issue/server common_name=\"#{node['fqdn']}\" ip_sans=\"#{node['ipaddress']}\" ttl=8760h format=pem").stdout
+      stdout = shell_out("vault write -format=json k8s-infra-interm/issue/server common_name=\"#{node['fqdn']}\" ip_sans=\"#{node['ipaddress']}\" ttl=8760h format=pem").stdout
       parsed_stdout = JSON.parse(stdout)
 
       File.write('/etc/k8s-certs/cert.pem', parsed_stdout['data']['certificate'])
