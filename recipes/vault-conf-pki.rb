@@ -39,6 +39,7 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
         ca_raw = shell_out('vault write --format=json k8s-infra/root/generate/internal common_name="K8S cluster Root CA" ttl=87600h key_bits=4096 exclude_cn_from_sans=true').stdout
         ca_data = JSON.parse(ca_raw)
         File.write('/etc/pki/ca-trust/source/anchors/vault_ca.pem', ca_data['data']['certificate'])
+        notifies :run, 'execute[update_trust]', :immediately
       end
     end
 
@@ -59,6 +60,7 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
         interm_cert = shell_out("vault write -format=json k8s-infra/root/sign-intermediate csr=@/etc/pki/ca-trust/source/anchors/vault_interm.csr common_name=\"K8S cluster Intermediate CA\" ttl=26280h").stdout
         interm_cert_data = JSON.parse(interm_cert)
         File.write('/etc/pki/ca-trust/source/anchors/k8s-infra-interm.crt', interm_cert_data['data']['certificate'])
+        notifies :run, 'execute[update_trust]', :immediately
       end
     end
 
@@ -77,6 +79,7 @@ if !File.file?('/etc/pki/ca-trust/source/anchors/vault_ca.pem')
 
     execute 'update_trust' do
       command '/usr/bin/update-ca-trust'
+      action :nothing
     end
   end
 else

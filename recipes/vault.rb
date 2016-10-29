@@ -36,10 +36,12 @@ if File.exist?('/etc/vault/key.pem') && File.exist?('/etc/vault/cert.pem')
     mode 0755
     content ::File.open('/etc/vault/cert.pem').read
     action :create
+    notifies :run, 'execute[update trust]', :immediately
   end
 
   execute 'update trust' do
     command '/usr/bin/update-ca-trust'
+    action :nothing
   end
 
   include_recipe 'kubernetes::vault-binaries'

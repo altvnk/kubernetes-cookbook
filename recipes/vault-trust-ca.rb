@@ -25,20 +25,23 @@ interm_databag_item = begin
                       end
 
 
-if !cert_databag.nil? && !cert_databag_item.nil?
+if !cert_databag.nil? && !cert_databag_item.nil? && !File.file?('/etc/pki/ca-trust/source/anchors/internal_ca.pem')
   certs = data_bag_item('vault_ca','ca')
   file '/etc/pki/ca-trust/source/anchors/internal_ca.pem' do
     content certs['ca_cert']
+    notifies :run, 'execute[update-ca-trust]', :immediately
   end
 end
 
-if !cert_databag.nil? && !interm_databag_item.nil?
+if !cert_databag.nil? && !interm_databag_item.nil? && !File.file?('/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem')
   interm = data_bag_item('vault_ca','interm')
   file '/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem' do
     content interm['interm_cert']
+    notifies :run, 'execute[update-ca-trust]', :immediately
   end
 end
 
 execute 'update-ca-trust' do
   command 'update-ca-trust'
+  action :nothing
 end
