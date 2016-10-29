@@ -30,11 +30,36 @@ ruby_block 'vault_init' do
         init_cmd_keys['id'] = 'key' + (index+1).to_s
         init_cmd_keys['key'] = value
         if !value.empty?
-          databag_item = Chef::DataBagItem.new
-          databag_item.data_bag('vault_keys')
-          databag_item.raw_data = init_cmd_keys
-          databag_item.create
-          databag_item.save
+
+          databag = begin
+                      data_bag('vault_keys')
+                    rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
+                      nil
+                    end
+
+          databag_item = begin
+                           data_bag_item('vault_keys', init_cmd_keys['id'])
+                         rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
+                           nil
+                         end
+
+          if databag && databag_item
+            write_to = data_bag_item('vault_keys', init_cmd_keys['id'])
+            write_to['key'] = init_cmd_keys['key']
+            write_to.save
+          else if !databag
+            databag = Chef::DataBag.new
+            databag.name('vault_keys')
+            databag.create
+          else if !databag_item
+            databag_item = Chef::DataBagItem.new
+            databag_item.data_bag('vault_keys')
+            databag_item.raw_data = init_cmd_keys
+            databag_item.create
+            databag_item.save
+          end
+          end
+          end
         end
       end
 
@@ -42,11 +67,36 @@ ruby_block 'vault_init' do
         token = line.split(':')[1].strip
         init_cmd_token['token'] = token
         if !token.empty?
-          databag_item = Chef::DataBagItem.new
-          databag_item.data_bag('vault_keys')
-          databag_item.raw_data = init_cmd_token
-          databag_item.create
-          databag_item.save
+
+          databag = begin
+                      data_bag('vault_keys')
+                    rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
+                      nil
+                    end
+
+          databag_item = begin
+                           data_bag_item('vault_keys', 'vault_token')
+                         rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
+                           nil
+                         end
+
+          if databag && databag_item
+            write_to = data_bag_item('vault_keys', 'vault_token')
+            write_to['token'] = init_cmd_token['token']
+            write_to.save
+          else if !databag
+            databag = Chef::DataBag.new
+            databag.name('vault_keys')
+            databag.create
+          else if !databag_item
+            databag_item = Chef::DataBagItem.new
+            databag_item.data_bag('vault_keys')
+            databag_item.raw_data = init_cmd_token
+            databag_item.create
+            databag_item.save
+          end
+          end
+          end
         end
       end
     end

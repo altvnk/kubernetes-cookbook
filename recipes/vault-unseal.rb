@@ -9,6 +9,7 @@
 
 ENV['VAULT_ADDR'] = 'https://' + node['ipaddress'] + ':8200'
 
+
 ruby_block 'vault_unseal' do
   block do
     Chef::Resource::RubyBlock.send(:include,Chef::Mixin::ShellOut)
@@ -18,11 +19,18 @@ ruby_block 'vault_unseal' do
  #     keys = data_bag_item('vault_keys', 'keys', secret)
  #   else
     key = []
-    for i in 1..3 do
+    for i in 1..5 do
       key_id = 'key' + i.to_s
-      key[i] = data_bag_item('vault_keys', key_id)['key']
-      command = 'vault unseal ' + key[i]
-      shell_out(command)
+      key_databag_item = begin
+                           data_bag_item('vault_keys', key_id)
+                         rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
+                           nil
+                         end
+      if !key_databag_item.nil?
+        key[i] = data_bag_item('vault_keys', key_id)['key']
+        command = 'vault unseal ' + key[i]
+        shell_out(command)
+      end
     end
  #   end
   end

@@ -55,6 +55,6 @@ end
 
 # vault attributes
 default['vault']['pki']                      = []
-AttributeSearch.search(:node, 'run_list:*vault-conf-pki*') do |node|
+AttributeSearch.search(:node, 'run_list:*vault*') do |node|
   default['vault']['pki'] << "#{node['ipaddress']}"
 end
