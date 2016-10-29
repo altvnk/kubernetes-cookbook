@@ -7,7 +7,7 @@
 # All rights reserved - Do Not Redistribute
 #
 
-ENV['VAULT_ADDR'] = 'https://' + node['ipaddress'] + ':8200'
+ENV['VAULT_ADDR'] = 'https://' + node['vault']['pki'] + ':8200'
 
 if !File.file?('/etc/k8s-certs/key.pem')
   directory '/etc/k8s-certs' do
@@ -17,7 +17,6 @@ if !File.file?('/etc/k8s-certs/key.pem')
 
   ruby_block 'create_kubernetes_certs' do
     block do
-      require 'json'
 
       stdout = shell_out("vault write -format=json k8s-infra-interm/issue/server common_name=\"#{node['fqdn']}\" ip_sans=\"#{node['ipaddress']}\" ttl=8760h format=pem").stdout
       parsed_stdout = JSON.parse(stdout)
@@ -25,7 +24,7 @@ if !File.file?('/etc/k8s-certs/key.pem')
       cert_string = parsed_stdout['data']['certificate'] + '\n' + parsed_stdout['data']['issuing_ca']
       File.write('/etc/k8s-certs/cert.pem', cert_string)
       File.write('/etc/k8s-certs/key.pem', parsed_stdout['data']['private_key'])
-      
+
     end
   end
 

@@ -52,3 +52,9 @@ default['consul']['members']                      = []
 AttributeSearch.search(:node, 'run_list:*consul*') do |node|
   default['consul']['members'] << "#{node['ipaddress']}"
 end
+
+# vault attributes
+default['vault']['pki']                      = []
+AttributeSearch.search(:node, 'run_list:*vault-conf-pki*') do |node|
+  default['vault']['pki'] << "#{node['ipaddress']}"
+end
