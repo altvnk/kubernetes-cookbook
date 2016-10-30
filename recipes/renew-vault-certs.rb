@@ -2,14 +2,14 @@
 # Cookbook Name:: vault-issue-k8s-certs
 # Recipe:: renew-vault-certs
 #
-# Copyright (C) 2016 Oleksii Slobodyskyi
+# Copyright (C) 2016 Max Kozinenko
 #
 # All rights reserved - Do Not Redistribute
 #
 
 ENV['VAULT_ADDR'] = 'https://' + node['ipaddress'] + ':8200'
 
-if !File.file?('/etc/k8s-certs/cert.pem')
+unless File.file?('/etc/k8s-certs/cert.pem')
   directory '/etc/k8s-certs' do
     mode '0755'
     action :create
@@ -20,7 +20,7 @@ if !File.file?('/etc/k8s-certs/cert.pem')
                        rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
                          nil
                        end
-  if !token_databag_item.nil?
+  unless token_databag_item.nil?
     token = data_bag_item('vault_keys', 'vault_token')['token']
     execute 'vault_auth' do
       command "vault auth #{token}"
@@ -48,23 +48,23 @@ if !File.file?('/etc/k8s-certs/cert.pem')
       mode '0755'
     end
   end
+end
 
-else if File.file?('/etc/k8s-certs/key.pem') && File.file?('/etc/k8s-certs/cert.pem')
+if File.file?('/etc/k8s-certs/key.pem') && File.file?('/etc/k8s-certs/cert.pem')
 
-  if !FileUtils.compare_file('/etc/vault/cert.pem', '/etc/k8s-certs/cert.pem')
-    file '/etc/vault/cert.pem' do
-      mode 0755
-      content ::File.open('/etc/k8s-certs/cert.pem').read
-      action :create
-    end
+  file '/etc/vault/cert.pem' do
+    not_if { ::FileUtils.compare_file('/etc/vault/cert.pem', '/etc/k8s-certs/cert.pem') }
+    mode 0755
+    content ::File.open('/etc/k8s-certs/cert.pem').read
+    action :create
   end
-  if !FileUtils.compare_file('/etc/vault/key.pem', '/etc/k8s-certs/key.pem')
-    file '/etc/vault/key.pem' do
-      mode 0755
-      content ::File.open('/etc/k8s-certs/key.pem').read
-      action :create
-      notifies :restart, 'service[vault]', :immediately
-    end
+
+  file '/etc/vault/key.pem' do
+    not_if { ::FileUtils.compare_file('/etc/vault/key.pem', '/etc/k8s-certs/key.pem') }
+    mode 0755
+    content ::File.open('/etc/k8s-certs/key.pem').read
+    action :create
+    notifies :restart, 'service[vault]', :immediately
   end
 
   service 'vault' do
@@ -74,5 +74,3 @@ else if File.file?('/etc/k8s-certs/key.pem') && File.file?('/etc/k8s-certs/cert.
   include_recipe 'kubernetes::vault-unseal'
 
 end
-end
-

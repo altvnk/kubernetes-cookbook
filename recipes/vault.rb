@@ -12,22 +12,20 @@ directory '/etc/vault' do
   recursive true
 end
 
-if !File.exist?('/etc/vault/key.pem')
-  openssl_rsa_key '/etc/vault/key.pem' do
-    key_length 2048
-  end
+openssl_rsa_key '/etc/vault/key.pem' do
+  not_if { ::File.exist?('/etc/vault/key.pem') }
+  key_length 2048
 end
 
-if !File.exist?('/etc/vault/cert.pem')
-  openssl_x509 '/etc/vault/cert.pem' do
-    common_name node['fqdn']
-    key_file '/etc/vault/key.pem'
-    org 'K8s Infra'
-    org_unit 'Lab'
-    country 'US'
-    subject_alt_name ['IP:' + node['ipaddress']]
-    expire 1825
-  end
+openssl_x509 '/etc/vault/cert.pem' do
+  not_if { ::File.exist?('/etc/vault/cert.pem') }
+  common_name node['fqdn']
+  key_file '/etc/vault/key.pem'
+  org 'K8s Infra'
+  org_unit 'Lab'
+  country 'US'
+  subject_alt_name ['IP:' + node['ipaddress']]
+  expire 1825
 end
 
 if File.exist?('/etc/vault/key.pem') && File.exist?('/etc/vault/cert.pem')

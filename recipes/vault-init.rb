@@ -100,29 +100,5 @@ ruby_block 'vault_init' do
         end
       end
     end
-
- #   if File.file?(Chef::Config[:encrypted_data_bag_secret])
- #     secret = Chef::EncryptedDataBagItem.load_secret(Chef::Config[:encrypted_data_bag_secret])
- #     data_bag_keys = Chef::EncryptedDataBagItem.encrypt_data_bag_item(init_cmd_keys, secret)
- #     data_bag_token = Chef::EncryptedDataBagItem.encrypt_data_bag_item(init_cmd_token, secret)
- #   else
- #     data_bag_keys = init_cmd_keys
- #     data_bag_token = init_cmd_token
- #   end
-
-
- #   databag = Chef::DataBag.new
- #   databag.name('vault_keys')
- #   databag.create
-
- #   databag_item = Chef::DataBagItem.new
- #   databag_item.raw_data = data_bag_keys
- #   databag_item.data_bag('vault_keys')
-#    databag_item.create
-#    databag_item.save
-
-
-#    databag_item.create
-
   end
 end
