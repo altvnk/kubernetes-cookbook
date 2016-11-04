@@ -10,5 +10,6 @@ cookbook 'vagrant', path: 'test/cookbooks/vagrant'
 cookbook 'chef-client', '~> 6.0.0'
 cookbook 'zipfile', '~> 0.1.0'
 cookbook 'openssl', git: 'https://github.com/3ofcoins/chef-cookbook-openssl.git'
+cookbook 'resolver', '~> 2.0.0'
 
 metadata

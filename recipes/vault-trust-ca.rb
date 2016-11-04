@@ -6,42 +6,13 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-cert_databag = begin
-                 data_bag('vault_ca')
-               rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
-                 nil
-               end
 
-cert_databag_item = begin
-                      data_bag_item('vault_ca', 'ca')
-                    rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
-                      nil
-                    end
-
-interm_databag_item = begin
-                        data_bag_item('vault_ca', 'interm')
-                      rescue Net::HTTPServerException, Chef::Exceptions::InvalidDataBagPath
-                        nil
-                      end
-
-
-if !cert_databag.nil? && !cert_databag_item.nil? && !File.file?('/etc/pki/ca-trust/source/anchors/internal_ca.pem')
-  certs = data_bag_item('vault_ca','ca')
-  file '/etc/pki/ca-trust/source/anchors/internal_ca.pem' do
-    content certs['ca_cert']
-    notifies :run, 'execute[update-ca-trust]', :immediately
-  end
-end
-
-if !cert_databag.nil? && !interm_databag_item.nil? && !File.file?('/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem')
-  interm = data_bag_item('vault_ca','interm')
-  file '/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem' do
-    content interm['interm_cert']
-    notifies :run, 'execute[update-ca-trust]', :immediately
-  end
-end
-
-execute 'update-ca-trust' do
-  command 'update-ca-trust'
-  action :nothing
+vault 'trust-ca' do
+  api_server "https://#{node['consul']['members'][rand(node['consul']['members_num'])]}:8200"
+  ca_data_bag_name 'vault_ca'
+  trusted_ca_file '/etc/pki/ca-trust/source/anchors/vault_ca.pem'
+  trusted_ca_data_bag_item_name 'ca'
+  intermediate_certificate_file '/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem'
+  intermediate_certificate_data_bag_item_name 'interm'
+  action :trust_ca
 end

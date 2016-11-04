@@ -1,13 +1,13 @@
-cluster_name = "k8s_vault"
+cluster_name = "<%= @cluster_name %>"
 
 listener "tcp" {
-address = "<%=@node_addr%>:8200"
-tls_cert_file = "/etc/vault/cert.pem"
-tls_key_file = "/etc/vault/key.pem"
+  address = "<%= @node_addr %>:8200"
+  tls_cert_file = "<%= @server_certificate_file %>"
+  tls_key_file = "<%= @server_key_file %>"
 }
 
 backend "consul" {
-address = "<%=@node_addr%>:8500"
-redirect_addr = "https://<%=@node_addr%>:8200"
-path = "vault"
+  address = "<%= @node_addr %>:8500"
+  redirect_addr = "https://<%= @node_addr %>:8200"
+  path = "vault"
 }

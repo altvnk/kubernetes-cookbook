@@ -1,10 +1,10 @@
 [Unit]
-Description=Consul
+Description=Vault
 After=network.service
 
 [Service]
 User=root
-ExecStart=/usr/local/bin/vault server -config=/etc/vault/vault.hcl
+ExecStart=/usr/local/bin/vault server -config=<%= @server_config_file %>
 Restart=always
 RestartSec=10
 

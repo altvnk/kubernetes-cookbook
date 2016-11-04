@@ -1,0 +1,7 @@
+ETCD_CACERT=/etc/pki/k8s-infra-interm.pem
+ETCD_TLSKEY=/etc/keys/key.pem
+ETCD_TLSPEM=/etc/keys/cert.pem
+ETCD_MACHINES=<%=@etcd_members_string%>
+SKYDNS_ADDR=<%=@host_ip%>:53
+SKYDNS_DOMAIN=<%=@domain%>
+SKYDNS_NAMESERVERS=8.8.8.8:53,8.8.4.4:53

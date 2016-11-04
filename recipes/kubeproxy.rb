@@ -8,5 +8,7 @@
 #
 
 kube_proxy 'kubeproxy' do
+  master node['kubernetes']['apiserver']['cluster_url'][0]
+  kubeconfig '/var/lib/kubelet/kubeconfig'
   action [:create, :start]
 end

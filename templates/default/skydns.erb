@@ -1,0 +1,16 @@
+[Unit]
+Description=skydns node
+After=docker.service
+Requires=docker.service
+
+[Service]
+User=root
+EnvironmentFile=/etc/skydns/skydns-env
+ExecStartPre=-/usr/bin/docker rm -f skydns
+ExecStart=/usr/bin/docker run --net=host -v /etc/pki/ca-trust/source/anchors:/etc/pki:ro -v /etc/k8s-certs:/etc/keys:ro --name=skydns --env-file=/etc/skydns/skydns-env skynetservices/skydns:latest
+ExecStop=-/usr/bin/docker stop skydns
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
