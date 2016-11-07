@@ -35,8 +35,9 @@ template '/var/lib/kubelet/kubeconfig' do
     cluster_url: node['kubernetes']['apiserver']['name_cluster_url'][0],
     base64encodedcert: '/etc/k8s-certs/cert.pem',
     base64encodedkey: '/etc/k8s-certs/key.pem',
-    base64encodedcacert: '/etc/pki/ca-trust/source/anchors/vault_ca.pem'
+    base64encodedcacert: '/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem'
   )
+  notifies :restart, 'service[kubelet]', :immediately
 end
 
 kubelet_service 'kubelet' do
@@ -50,11 +51,17 @@ kubelet_service 'kubelet' do
   network_plugin_dir '/etc/cni/net.d'
   tls_cert_file '/etc/k8s-certs/cert.pem'
   tls_private_key_file '/etc/k8s-certs/key.pem'
+  cert_dir '/etc/k8s-certs'
   action %w(create start)
 end
 package 'ethtool'
 group 'docker' do
   members ['kubernetes']
+end
+
+service 'kubelet' do
+  only_if { ::File.file?('/etc/systemd/system/kubelet.service') }
+  action :nothing
 end
 
 include_recipe 'kubernetes::calico-policy-controller'

@@ -34,7 +34,7 @@ spec:
           # changed so long as it is used in conjunction with
           # CONFIGURE_ETC_HOSTS="true".
         - name: K8S_API
-          value: "<%=@kubemaster_url%>"
+          value: "https://10.0.0.1"
           # Configure /etc/hosts within the container to resolve
           # the kubernetes.default Service to the correct clusterIP
           # using the environment provided by the kubelet.

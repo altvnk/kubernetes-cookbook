@@ -15,6 +15,11 @@ vault 'renew-vault-certs' do
   server_key_file '/etc/vault/key.pem'
   server_certificate_file '/etc/vault/cert.pem'
   action :renew_server_certificates
+  notifies :restart, 'service[vault]', :immediately
+end
+
+service 'vault' do
+  action :nothing
 end
 
 include_recipe 'kubernetes::vault-unseal'

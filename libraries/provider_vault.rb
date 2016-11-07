@@ -368,6 +368,10 @@ class Chef
         return unless ::File.file? new_resource.kubernetes_certificate_file
         return unless ::File.file? new_resource.kubernetes_key_file
 
+        service 'vault' do
+          action :nothing
+        end
+
         file new_resource.server_key_file do
           action :nothing
           not_if { ::FileUtils.compare_file(new_resource.server_key_file, new_resource.kubernetes_key_file) }
@@ -383,10 +387,6 @@ class Chef
           content ::File.open(new_resource.kubernetes_certificate_file).read
           notifies :restart, 'service[vault]', :immediately
         end.run_action(:create)
-
-        service 'vault' do
-          action :nothing
-        end
       end
 
       action :trust_ca do

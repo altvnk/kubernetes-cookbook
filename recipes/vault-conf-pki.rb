@@ -18,7 +18,7 @@ vault 'configure-pki' do
   trusted_ca_file '/etc/pki/ca-trust/source/anchors/vault_ca.pem'
   trusted_ca_data_bag_item_name 'ca'
   csr_file '/etc/pki/ca-trust/source/anchors/vault_interm.csr'
-  intermediate_certificate_file '/etc/pki/ca-trust/source/anchors/k8s-infra-interm.crt'
+  intermediate_certificate_file '/etc/pki/ca-trust/source/anchors/k8s-infra-interm.pem'
   intermediate_certificate_data_bag_item_name 'interm'
   action :configure_pki
 end

@@ -28,19 +28,19 @@ end
 remote_file 'calicoctl binary' do
   path '/usr/bin/calicoctl'
   mode '0777'
-  source 'http://www.projectcalico.org/builds/calicoctl'
+  source 'https://github.com/projectcalico/calico-containers/releases/download/v0.23.0/calicoctl'
 end
 
 remote_file 'calico binary' do
   path '/opt/cni/bin/calico'
   mode '0777'
-  source 'https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico'
+  source 'https://github.com/projectcalico/calico-cni/releases/download/v1.4.3/calico'
 end
 
 remote_file 'calico-ipam binary' do
   path '/opt/cni/bin/calico-ipam'
   mode '0777'
-  source 'https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam'
+  source 'https://github.com/projectcalico/calico-cni/releases/download/v1.4.3/calico-ipam'
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/cni-v0.3.0.tgz" do

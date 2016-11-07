@@ -1,12 +1,13 @@
 {
-"name": "calico-k8s-network",
-"type": "calico",
-"etcd_endpoints": "<%=@etcd_members_string%>",
+  "name": "calico-k8s-network",
+  "type": "calico",
+  "etcd_endpoints": "<%=@etcd_members_string%>",
   "log_level": "info",
-  "ipam": {"type": "calico-ipam"},
+  "ipam": {
+    "type": "calico-ipam"
+    },
   "policy": {
-    "type": "k8s",
-    "k8s_api_root": "<%=@k8s_apiserver%>/api/v1/"
+    "type": "k8s"
     },
   "kubernetes": {
     "kubeconfig": "/var/lib/kubelet/kubeconfig"

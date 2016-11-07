@@ -54,7 +54,8 @@ AttributeSearch.search(:node, 'run_list:*master*') do |node|
 end
 
 # chef-client attributes
-default['chef_client']['interval'] = 300
+default['chef_client']['interval'] = 180
+default['chef_client']['splay'] = 0
 
 # consul attributes
 default['consul']['members'] = []

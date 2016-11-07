@@ -16,6 +16,6 @@ vault 'issue-k8s-master-certs' do
   kubernetes_certificate_file '/etc/k8s-certs/cert.pem'
   kubernetes_certificate_common_name node['fqdn']
   kubernetes_certificate_alt_names 'kubernetes,kubernetes.local'
-  kubernetes_certificate_ip_sans "#{node['ipaddress']},10.100.0.1,10.0.0.1"
+  kubernetes_certificate_ip_sans "#{node['ipaddress']},10.0.0.1"
   action :issue_kubernetes_certificates
 end
